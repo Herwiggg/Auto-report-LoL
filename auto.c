@@ -1,11 +1,31 @@
 #include <stdio.h>
 #include <windows.h>
 
-HWND FindWindowByTitle(const char *title) 
+HWND FindWindowByTitle(HWND *hwnd, const char *title) 
 {
-    return FindWindowA(NULL, title);
+    *hwnd = FindWindowA(NULL, title);
+    if (hwnd == NULL)
+        printf("Window not found.\n");
+    return (*hwnd);
 }
 
+void  initInput(INPUT *input, char *flag)
+{
+    if (strcmp(flag, "left") == 0)
+    {
+        input[0].type = INPUT_MOUSE;
+        input[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+        input[1].type = INPUT_MOUSE;
+        input[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    }
+    else
+    {
+        input[0].type = INPUT_MOUSE;
+        input[0].mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
+        input[1].type = INPUT_MOUSE;
+        input[1].mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+    }
+}
 void report(INPUT *leftClickInputs, int reportX, int reportY)
 {
     SetCursorPos(reportX, reportY);
@@ -48,31 +68,22 @@ void autoClicker(HWND hwnd, int x, int y, int clickCount, int flag)
         return;
     }
     INPUT leftClickInputs[2] = {0};
-    leftClickInputs[0].type = INPUT_MOUSE;
-    leftClickInputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-    leftClickInputs[1].type = INPUT_MOUSE;
-    leftClickInputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
-    
+    initInput(leftClickInputs, "left");
     INPUT rightClickInputs[2] = {0};
-    rightClickInputs[0].type = INPUT_MOUSE;
-    rightClickInputs[0].mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
-    rightClickInputs[1].type = INPUT_MOUSE;
-    rightClickInputs[1].mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+    initInput(rightClickInputs, "right");
 
-    int reportX = rect.left + (470);
-    int reportY = rect.top + (195);
-
-    int screenX = rect.left + (x);
-    int screenY = rect.top + (y);
-
-    int SignalX = screenX;
-    int SignalY = screenY;
+    int reportX = rect.left + 470;
+    int reportY = rect.top + 195;
+    int screenX = rect.left + x;
+    int screenY = rect.top + y;
+    int signalX = screenX;
+    int signalY = screenY;
 
     if (flag == 1)
     {
         i = 4;
-        SignalX = screenX + 120;
-        SignalY = screenY + 520;
+        signalX = screenX + 120;
+        signalY = screenY + 520;
 
         screenY = screenY + 181;
     }
@@ -83,26 +94,24 @@ void autoClicker(HWND hwnd, int x, int y, int clickCount, int flag)
         SendInput(2, rightClickInputs, sizeof(INPUT));
         if (i <= 6)
         {
-            SignalX = screenX + (30);
-            SignalY = screenY + (130);
+            signalX = screenX + 30;
+            signalY = screenY + 130;
         }
         else
         {
-            SignalX = screenX + (30);
-            SignalY = screenY - (10);
+            signalX = screenX + 30;
+            signalY = screenY - 10;
         }
         Sleep(500);
-        SetCursorPos(SignalX, SignalY);
+        SetCursorPos(signalX, signalY);
         Sleep(680);
         SendInput(2, leftClickInputs, sizeof(INPUT));
         Sleep(555);
-
-        // Report Event
         report(leftClickInputs, reportX, reportY);
         if (i != 3)
-            screenY = screenY + (32);
+            screenY = screenY + 32;
         else
-            screenY = screenY + (85);
+            screenY = screenY + 85;
         Sleep(500);
     }
     printf("Players have been reported\n");
@@ -110,11 +119,9 @@ void autoClicker(HWND hwnd, int x, int y, int clickCount, int flag)
 
 int main(int ac, char **av) 
 {
-    HWND hwnd = FindWindowByTitle("League of Legends");
-    if (hwnd == NULL) {
-        printf("Window not found.\n");
-        return 1;
-    }
+    HWND hwnd;
+    if (FindWindowByTitle(&hwnd ,"League of Legends") == NULL)
+        return (1);
     if (ac == 1)
         autoClicker(hwnd, 150, 320, 9, 0);
     else if (strcmp(av[1], "team") == 0)
