@@ -10,7 +10,9 @@ Works only on Windows and on the basic League of Legends launcher resolution (12
 Go to your game history and click on the game you want
 The executable name is auto.c
 
-Options : 
+Options :
+
+
 ./auto.c
      By default the program reports each member of the game
      
