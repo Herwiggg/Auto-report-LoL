@@ -12,18 +12,17 @@ The executable name is auto.c
 
 Options :
 
+By default the program reports each member of the game
 
-./auto.c
-
-     By default the program reports each member of the game
+          ./auto.c
      
-./auto.c team
+Reports only the members of your team
 
-    Reports only the members of your team
+     ./auto.c team
     
-./auto.c team
+Reports only the members of the opponent team
 
-       Reports only the members of the opponent team
+          ./auto.c team
     
       
 
