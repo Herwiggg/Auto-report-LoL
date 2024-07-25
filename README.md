@@ -7,7 +7,8 @@ Compile with the following command
 ## Usage
 Works only on Windows and on the basic League of Legends launcher resolution (1280 x 720)
 
-Go to your game history and click on the game you want
+Go to your game history and click on the game you want to report
+
 The executable name is auto.c
 
 Options :
