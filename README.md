@@ -23,7 +23,7 @@ Reports only the members of your team
     
 Reports only the members of the opponent team
 
-    ./auto.c team
+    ./auto.c ennemies
     
       
 
